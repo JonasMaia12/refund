@@ -9,6 +9,9 @@ const expenseList = document.querySelector("ul")
 const expensesTotal = document.querySelector("aside header h2")
 const expensesQuantity = document.querySelector("aside header p span")
 
+// Carrega as despesas salvas do localStorage ao iniciar a página
+document.addEventListener("DOMContentLoaded", loadExpenses)
+
 //Captura o evento de input para formamtar o valor
 amount.oninput = () => {
   //Obtem o valor atual do input e remove os caracteres nao numericos
@@ -49,6 +52,8 @@ form.onsubmit = (event) => {
 
   //Chama a funcao que ira adicionar o item na lista
   expenseAdd(newExpense)
+
+  saveExpenses()
 }
 
 //Adiciona um novo item na lista
@@ -172,6 +177,7 @@ expenseList.addEventListener("click", function (event) {
 
     //Remove o item da lista
     item.remove()
+    saveExpenses()
   }
 
   //Atualiza os totais.
@@ -186,4 +192,39 @@ function formClear() {
 
   //coloca o foco no iput de amount
   expense.focus()
+}
+
+// Salva as despesas no localStorage
+function saveExpenses() {
+  const expenses = []
+  const items = expenseList.children
+
+  for (let item = 0; item < items.length; item++) {
+    const expenseName = items[item].querySelector("strong").textContent
+    const categoryName = items[item].querySelector("span").textContent
+    const amount = items[item].querySelector(".expense-amount").textContent
+
+    expenses.push({
+      expense: expenseName,
+      category_name: categoryName,
+      amount: amount,
+    })
+  }
+
+  localStorage.setItem("expenses", JSON.stringify(expenses))
+}
+
+// Carrega as despesas do localStorage
+function loadExpenses() {
+  const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || []
+
+  savedExpenses.forEach((expense) => {
+    expenseAdd({
+      expense: expense.expense,
+      category_name: expense.category_name,
+      amount: expense.amount,
+    })
+  })
+
+  updateTotals()
 }
