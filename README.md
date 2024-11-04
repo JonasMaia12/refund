@@ -9,7 +9,7 @@
 <br>
 
 <p align="center">
-  <img alt="projeto Sistema de reembolso" src="./assets/preview.svg" width="100%">
+  <img alt="projeto Sistema de reembolso" src="./img/preview.svg" width="100%">
 </p>
 
 ## 🚀 Tecnologias
